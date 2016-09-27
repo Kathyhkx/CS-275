@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<title>SEPTA Schedule Search Tool</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<style>
+table, td {
+    border: 1.5px solid black;
+}
+</style>
+</head>
+
+<body>
+
+<h1 align="center">SEPTA Schedule</h1>
+<hr></hr>
+<h3>
+	Choose a route number to generate schedule:
+</h3>
+<select id="route">
+	<option value="6">6</option>
+	<option value="14">14</option>
+	<option value="17">17</option>
+	<option value="20">20</option>
+	<option value="23">23</option>
+	<option value="33">33</option>
+	<option value="37">37</option>
+	<option value="42">42</option>
+	<option value="47">47</option>
+	<option value="52">52</option>
+	<option value="56">56</option>
+	<option value="60">60</option>
+	<option value="66">66</option>
+	<option value="73">73</option>
+	<option value="79">79</option>
+	<option value="108">108</option>
+	<option value="109">109</option>
+</select>
+<button type="button" onclick="getSchedule()">Generate!</button>
+<h3 align="center">Schedule Table</h3>
+<div>
+	<table align="center" id="schedule">
+	</table>
+</div>
+
+<script>
+function getSchedule(){
+	var route = $("#route");
+	$.ajax({	
+		type: "GET",
+		url: "https://www.cs.drexel.edu/~pp468/api/request.php",
+		data: {
+             url: "https://www3.septa.org/hackathon/TransitView/?route=" + route.val()
+        },
+		dataType: "json",
+		
+		success: function(json){
+				document.getElementById("schedule").innerHTML = "<tr><td>Vehicle ID#</td> <td>Block ID#</td> <td>Direction#</td> <td>Destination</td> <td>Delay or Not</td></tr>";
+				for(var i=0; i<json.bus.length; i++){
+					var vehicleNumber = json.bus[i].VehicleID;
+					var blockID = json.bus[i].BlockID;
+					var direction = json.bus[i].Direction;
+					var destination = json.bus[i].destination;
+					var offset_sec = json.bus[i].Offset_sec;
+					var offset_sec_n = parseInt(offset_sec);
+					if(offset_sec_n >= 120){
+						var delay = "Delayed";
+						}
+					else{
+						var delay = "On Time";
+						}
+					
+					var myTable = document.getElementById("schedule");
+					var row = myTable.insertRow(-1);
+					var cell1 = row.insertCell(0);
+					var cell2 = row.insertCell(1);
+					var cell3 = row.insertCell(2);
+					var cell4 = row.insertCell(3);
+					var cell5 = row.insertCell(4);
+					cell1.innerHTML = vehicleNumber;
+					cell2.innerHTML = blockID;
+					cell3.innerHTML = direction;
+					cell4.innerHTML = destination;
+					cell5.innerHTML = delay;
+				}
+		},
+		
+		error: function(xhr, ajaxOptions, thrownError){
+			document.getElementById("schedule").innerHTML = "Error fetching "
+		        	     + myURL;
+		}
+	})
+}
+</script>
+	
+
+</body>
+</html>

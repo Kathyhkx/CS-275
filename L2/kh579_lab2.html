@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">
+</script>
+<title>Weather Wunderground Web Service</title>
+</head>
+<body>
+<h1>Weather Wunderground Web Service</h1>
+<form action="">
+License Key: <br>
+<input type="text" id="Key">
+<br>
+<input type="button" onclick="requestWeather()" value="Get Weather!"/>
+<div id=current></div>
+<script>
+function requestWeather(){
+		 var key = $("#Key");
+		 var parseURL = "https://api.wunderground.com/api/"+key.val()+"/geolookup/q/autoip.json";
+		 $.ajax({
+		 		type: "GET",
+		 		url: parseURL,
+		 		contentType: "application/json; charset-utf-8",
+		 		data: "{}",
+		 		dataType: "jsonp",
+		 		success: function(msg) {
+		 				var json = msg;
+		 				var zip = json.location.zip;
+		 				var URL = "https://api.wunderground.com/api/"+key.val()+"/hourly/q/"+zip+".json";
+		 				$.ajax({
+        					type: "GET",
+        					url: URL,
+        					contentType: "application/json; charset-utf-8",
+        					data: "{}",
+        					dataType: "jsonp",
+        					success: function(data){
+        					        var result = "";
+        							for(var i=0; i<data.hourly_forecast.length;i++){
+        								var time = data.hourly_forecast[i].FCTTIME.pretty;
+        								var weekday = data.hourly_forecast[i].FCTTIME.weekday_name_abbrev;
+        								var temp_f = data.hourly_forecast[i].temp.english;
+        								var temp_c = data.hourly_forecast[i].temp.metric;
+        								var icon_url = data.hourly_forecast[i].icon_url;
+        							    result += "Zip Code: "+ zip + "<br>" +"Time: " +  time + " "+ weekday + "<br>" +
+        							    	"Temperature: "+ temp_f + " F " + temp_c + " C " + "<br/><img src ='" + icon_url+"'/>" 
+        							    	+ "<br>";
+        							document.getElementById("current").innerHTML = result;
+        					}
+        
+        					}})
+		        },
+		        error: function (xhr, ajaxOption, thrownError) {
+		        	     document.getElementById("current").innerHTML = "Error fetching "
+		        	     + parseURL;
+		        }
+
+        })
+        
+        }
+</script>
+</form>
+</body>
+</html>

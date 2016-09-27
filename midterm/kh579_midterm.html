@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script> 
+    	var board;
+		var player;
+		var turns = 0;
+		var winConditions = [[0,1,2], [3,4,5], [6,7,8],
+                       		[0,3,6], [1,4,7], [2,5,8],
+                       		[0,4,8], [6,4,2]]
+		var gameOver;
+
+		function renderBoard (){
+  			for (var i = 0;i<board.length;i++){
+    			$('.'+i).text(board[i]);
+  			 }
+		 }
+
+		function renderText(){
+  			$('.playerText').text('Turn : ' + player)
+	     }
+
+		function setCell(cell){
+  			if (gameOver) return;
+  			board[cell] = player;
+  			checkState();
+  			checkTie();
+  			if (gameOver) return;
+  			changePlayer();
+  			renderBoard();
+  			renderText();
+  			turns++;
+		}
+
+		function changePlayer(){
+  			if (player == "O")
+    			player = "X";
+  			else
+    			player = "O";
+		}
+		
+		function checkTie(){
+			if (turns == 8){
+				gameOver = true;
+   			 	$('.playerText').text('Two players tied up!');
+   			 	renderBoard();
+   			 }
+		}
+
+		function checkState(){
+  			$.each(winConditions, function(index,value){
+   			 if (board[winConditions[index][0]] == board[winConditions[index][1]] 
+    			 && board[winConditions[index][0]] == board[winConditions[index][2]] 
+    			 && board[winConditions[index][0]] != " "){
+      				 gameOver = true;
+      				 $('.playerText').text('Player ' + player + ' wins');
+      				 renderBoard();
+   			 } 
+  			});
+		}
+
+		function init(){
+  			board = [" "," "," "," "," "," "," "," "," "];
+  			player ="X";
+  			gameOver = false;
+  			renderBoard();
+  			renderText();
+  			turns = 0;
+		}
+
+		$(document).ready(function(){
+  		init();
+		});
+    </script>
+    <style>
+    	*{
+			margin:0;
+			padding:0;
+			box-sizing :border-box;
+		}
+
+		.container{
+			width:600px;
+			margin:100px auto;
+			text-align: center;
+		}
+		
+		.tictactoe{
+			margin:50px auto;
+		}
+
+		.board, .options{
+			width:300px;
+			margin:20px auto;
+			overflow: auto;
+		}
+
+		.cell{
+			float:left;
+			width:100px;
+			height:100px;
+			line-height: 100px;
+		}
+
+		[class*="0"],[class*="1"],[class*="2"],[class*="3"],[class*="4"],[class*="5"] {
+			border-bottom:2px solid black;
+		}
+		[class*="0"],[class*="3"],[class*="6"],[class*="1"],[class*="4"],[class*="7"] {
+			border-right:2px solid black;
+		}
+
+		.cell:hover{
+			background-color: rgba(0,0,0,0.02);
+		}
+
+		.playerText{
+			float:left;
+
+		}
+		.restart{
+			float:right;
+		}
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>TIC TAC TOE</h1>
+      <h3>This is a webpage tic tac toe game using JavaScript and jQuery</h3>
+      <div class='tictactoe'>
+        <div class="board">
+          <div class="cell 0" onClick="setCell(0)"></div>
+          <div class="cell 1" onClick="setCell(1)">></div>
+          <div class="cell 2" onClick="setCell(2)"></div>
+          <div class="cell 3" onClick="setCell(3)"></div>
+          <div class="cell 4" onClick="setCell(4)"></div>
+          <div class="cell 5" onClick="setCell(5)"></div>
+          <div class="cell 6" onClick="setCell(6)"></div>
+          <div class="cell 7" onClick="setCell(7)"></div>
+          <div class="cell 8" onClick="setCell(8)"></div>
+        </div>
+        <div class="options">
+          <div class="playerText"></div>
+          <button class="restart" onClick="init()">Replay!</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

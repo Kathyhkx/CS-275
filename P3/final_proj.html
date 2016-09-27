@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">
+</script>
+<title>Mock Restaurant Ordering System</title>
+</head>
+<style>
+body {
+    background-color: lightblue;
+}
+h1 {
+    color: white;
+    text-align: center;
+}
+
+.left{
+	float: left;
+	width: 300px;
+    border: 3px solid #73AD21;
+    padding: 10px;
+}
+.right{
+	float: right;
+	width: 300px;
+    border: 3px solid #73AD21;
+    padding: 10px;
+}
+
+img.displayed{
+	display: block;
+	margin-right: -50%;
+}
+input {
+	background-color: #555555;
+	color: white;
+	text-align: center;
+	display: inline-block;
+	font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+</style>
+<body>
+<h1>Welcome to Mock Restaurant Tools!</h1>
+<input class="left" type="submit" value="Create Order"
+    onclick="window.location='menu.html';" />
+<input class="right" type="submit" value="Manage Order"
+    onclick="window.location='orders.html';" />
+<img calss="displayed" src="welcome.png" alt="welcome" style="width:643px;height:245px;">
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">
+</script>
+<title>Orders</title>
+</head>
+<style>
+body {
+    background-color: lightblue;
+}
+h1 {
+    color: black;
+    text-align: left;
+}
+p {
+	color: #1a3300;
+	font-style: italic;
+	font-size: 21px;
+}
+input {
+	background-color: #555555;
+	color: white;
+	display: inline-block;
+	font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+div {
+	color: green;
+	font-size: 24px;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+tr:nth-child(odd) {background-color: #f2f2f2}
+
+</style>
+<body>
+<h1>Manage the Orders</h1>
+<form>
+  <p>Enter a Date for Order Details(mmddyy)</p>
+  Date:
+  <input type="text" id= 'Date' name="Date"><br>
+</form>
+<input type="submit" value="Show Today's Orders"
+    onclick="showOrder()" />
+<input type="submit" value="Calculate Today's Income"
+    onclick="dailyIncome()" />
+<table id='order'></table>
+<div id='income'></div>
+</body>
+<script>
+function showOrder(){
+var date = document.getElementById('Date').value;
+
+$.ajax({	
+	type: "GET",
+	url: "https://www.cs.drexel.edu/~pp468/api/request.php",
+	data: {
+            url: "http://nodejs.cci.drexel.edu/~qy48/FP_ORDER" + date
+       },
+	dataType: "json",
+		
+	success: function(json){
+        document.getElementById('order').innerHTML = "<tr><td>Order Number</td> <td>Items</td> <td>Total Price</td> <td>Date</td></tr>";
+        for(var i=0; i<json.length; i++){
+			var orderNumber = json[i].OrderNumber;
+			var items = json[i].Items;
+			var totalPrice = json[i].TotalPrice;
+			var date = json[i].Date
+				
+			var myTable = document.getElementById('order');
+			var row = myTable.insertRow(-1);
+				var cell1 = row.insertCell(0);
+				var cell2 = row.insertCell(1);
+				var cell3 = row.insertCell(2);
+				var cell4 = row.insertCell(3);
+				cell1.innerHTML = orderNumber;
+				cell2.innerHTML = items;
+				cell3.innerHTML = totalPrice;
+				cell4.innerHTML = date; 
+				
+           }
+    },
+	
+	error: function(xhr, ajaxOptions, thrownError){
+			document.getElementById("order").innerHTML = "Error fetching";
+    }
+
+});
+}
+
+function dailyIncome(){
+	var orderTable = document.getElementById('order');
+	var date = document.getElementById('Date').value;
+	var rowNum = parseInt(orderTable.rows.length);
+	var income = 0;
+	for(i=1;i<rowNum;i++){
+		var cells = orderTable.rows[i].cells;
+		income += Number(cells[2].innerHTML);
+	}
+	var display = document.getElementById('income');
+	display.innerHTML = "The total income for " + date + " is $" + income.toString() + "!";  
+}
+</script>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+ <head>
+ <style>
+	table, th, td {
+    border: 1px solid black;
+   }
+ </style>
+   <title> Fibonacci Numbers </title>
+   <h2>The History of Fibonacci Numbers</h2>
+ </head>
+ 
+ <body>
+   
+   <p> Fibonacci is one of the most famous names in mathematics. This would come as a surprise to Leonardo Pisano, the mathematician we now know by that name. And he might have been equally surprised that he has been immortalised in the famous sequence – 0, 1, 1, 2, 3, 5, 8, 13, ... – rather than for what is considered his far greater mathematical achievement – helping to popularise our modern number system in the Latin-speaking world.
+   </p>  
+   <p> The Roman Empire left Europe with the Roman numeral system which we still see, amongst other places, in the copyright notices after films and TV programmes (2013 is MMXIII). The Roman numerals were not displaced until the mid 13th Century AD, and Leonardo Pisano's book, Liber Abaci (which means "The Book of Calculations"), was one of the first Western books to describe their eventual replacement.
+   </p>
+   <p> Leonardo Pisano was born late in the twelfth century in Pisa, Italy: Pisano in Italian indicated that he was from Pisa, in the same way Mancunian indicates that I am from Manchester. His father was a merchant called Guglielmo Bonaccio and it's because of his father's name that Leonardo Pisano became known as Fibonacci. Centuries later, when scholars were studying the hand written copies of Liber Abaci (as it was published before printing was invented), they misinterpreted part of the title – "filius Bonacci" meaning "son of Bonaccio" – as his surname, and Fibonacci was born.
+   </p>
+   <p> Fibonacci (as we'll carry on calling him) spent his childhood in North Africa where his father was a customs officer. He was educated by the Moors and travelled widely in Barbary (Algeria), and was later sent on business trips to Egypt, Syria, Greece, Sicily and Provence. In 1200 he returned to Pisa and used the knowledge he had gained on his travels to write Liber Abaci (published in 1202) in which he introduced the Latin-speaking world to the decimal number system. The first chapter of Part 1 begins:
+   </p>
+   <p> "These are the nine figures of the Indians: 9 8 7 6 5 4 3 2 1. With these nine figures, and with this sign 0 which in Arabic is called zephirum, any number can be written, as will be demonstrated."
+   </p>
+   <p> Italy at the time was made up of small independent towns and regions and this led to use of many kinds of weights and money systems. Merchants had to convert from one to another whenever they traded between these systems. Fibonacci wrote Liber Abaci for these merchants, filled with practical problems and worked examples demonstrating how simply commercial and mathematical calculations could be done with this new number system compared to the unwieldy Roman numerals. The impact of Fibonacci's book as the beginning of the spread of decimal numbers was his greatest mathematical achievement. However, Fibonacci is better remembered for a certain sequence of numbers that appeared as an example in Liber Abaci.
+   </p>
+   <p></p>
+   <p></p>
+   <div>
+   <img src="fibonacci.jpg"																																		qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq" alt="Leonardo Fibonacci">
+   </div>
+   <p></p>
+   <form id=number>
+   Type a non-negative number:
+   <input type="text" name="number" size="5">
+   </form>
+   <div id="output">&nbsp;</div>
+   <button type="button" onclick="compute()">Compute</button>
+   <table frame="box" id="table">
+   <tr>
+   <th>n</th>
+   <th>fib(n)</th>
+ </tr>
+   </table>
+   
+   <script>
+   function compute(){
+   var input = document.getElementsByName('number')[0].value;
+   var num = parseInt(input);
+   if (isNaN(num)){
+   	document.getElementById('output').innerHTML = "Invalid Input";
+   } else if(num < 0){
+   	document.getElementById('output').innerHTML = "Cannot compute Fib of a negative integer";
+   } else {
+   var table = document.getElementById("table");
+   for(i = 0; i < num; i++){
+   var row = table.insertRow(-1);
+   var cell1 = row.insertCell(0);
+   var cell2 = row.insertCell(1);
+   cell1.innerHTML = i;
+   cell2.innerHTML = fib(i);
+   }}}
+   function fib(n){
+   var fibo = 1;
+   var fiboPrev = 1;
+   if (n == 0){
+    var result = 0;
+   }else if(n <= 1){
+    result = 1;
+   }else{
+     for(i = 2; i < parseInt(n); ++i){
+     var temp = fibo;
+     fibo += fiboPrev;
+     fiboPrev = temp;
+     }result = fibo;
+     }    
+     return result;}
+     
+   </script>
+ </body>

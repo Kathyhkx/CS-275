@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">
+</script>
+<title>Menu</title>
+</head>
+<style>
+body {
+    background-color: lightblue;
+}
+h1 {
+    color: black;
+    text-align: left;
+}
+input {
+	background-color: #555555;
+	color: white;
+	display: inline-block;
+	font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+table, th, td {
+	width: 630px;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+</style>
+
+<body>
+<h1>Select Items for the Order</h1>
+
+<table id='menu'>
+</table>
+</body>
+
+<script>
+$.ajax({	
+	type: "GET",
+	url: "https://www.cs.drexel.edu/~pp468/api/request.php",
+	data: {
+            url: "http://nodejs.cci.drexel.edu/~qy48/FP_MENU"
+       },
+	dataType: "json",
+		
+	success: function(json){
+        document.getElementById('menu').innerHTML = "<tr><td>ID</td> <td>Item Name</td> <td>Type</td> <td>Price</td> <td>Count</td></tr>";
+        for(var i=0; i<json.length; i++){
+			var id = json[i].id;
+			var itemName = json[i].ItemName;
+			var type = json[i].Type;
+			var price = json[i].Price
+				
+			var myTable = document.getElementById('menu');
+			var row = myTable.insertRow(-1);
+				var cell1 = row.insertCell(0);
+				var cell2 = row.insertCell(1);
+				var cell3 = row.insertCell(2);
+				var cell4 = row.insertCell(3);
+				var cell5 = row.insertCell(4);
+				cell1.innerHTML = id;
+				cell2.innerHTML = itemName;
+				cell3.innerHTML = type;
+				cell4.innerHTML = price; 
+				cell5.innerHTML = "<select id=\'menu" + i + "\'><option value='0'>0</option><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option><option value='6'>6</option><option value='7'>7</option><option value='8'>8</option><option value='9'>9</option><option value='10'>10</option></select>" 
+           }
+    },
+	
+	error: function(xhr, ajaxOptions, thrownError){
+			document.getElementById("schedule").innerHTML = "Error fetching";
+    }
+
+});
+
+function calculateChange(){
+	var payment = parseInt(document.getElementById('Payment').value);
+	var price = 0;
+	var rowNum = 20;
+	var menuTable = document.getElementById('menu');
+	for(i = 1; i<rowNum;i++){
+		var cells = menuTable.rows[i].cells;
+		var e = cells[4].getElementsByTagName("select")[0];
+		var count = e.options[e.selectedIndex].value;
+		price = price+ Number(cells[3].innerHTML)*parseInt(count);
+	}
+	document.getElementById('Price').value = price.toString();
+	var change = payment - price;
+	document.getElementById('Change').value = change.toString();
+}
+</script>
+
+<form>
+  Total Payment:
+  <input type="text" id="Payment">&nbsp;
+  Total Price:
+  <input type="text" id="Price">&nbsp;
+  Change:
+  <input type="text" id="Change">&nbsp;
+</form>
+
+<input type="submit" value="Calculate Changes"
+    onclick="calculateChange()" />
+
+<input type="submit" value="Complete Order"
+    onclick="" />
+</html>
